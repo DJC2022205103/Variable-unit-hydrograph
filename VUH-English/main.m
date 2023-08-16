@@ -1,10 +1,7 @@
 %Improved Gradient descent method for parameter calibration of rainfall-runoff model
 clear;clc;
-%Firstly, input flood data and place it in a cell array, where each cell represents a flood (consisting of n columns of rainfall data and 1 column of flow data). The following is an example of four floods. The first five columns of each flood contain data from five rainfall stations, and the sixth column contains measured flow data, with a duration of one hour.
-data{1}=[0,0,0,0,0,0.08;0,0,0,0,0,0.102857143;0,0,0,0,0,0.125714286;0,7.5,0,0,0,0.148571429;29.4,72.7,33,27.3,33,0.6;21.1,17.6,27.2,11.2,20.5,103;3.1,0,0.2,0.5,0.3,37.6;0,0,0,0,0.3,9.09;0,0,0,0,0.3,5.57;0,0,0,0,0.3,3.09;0,0,0,0,0.3,3.020243902;0,0,0,0,0.3,2.83;0,0,0,0,0.3,2.476666667;0,0,0,0,0.3,2.123333333;0,0,0,0,0.3,1.77;0,0,0,0,0.3,1.416666667;0,0,0,0,0.3,1.23970724;0,0,0,0,0.3,1.238731373;0,0,0,0,0.3,1.237755506;0,0,0,0,0.3,1.236779639;0,0,0,0,0.3,1.235803772];
-data{2}=[0.9,1.6,0,0,0,0.530751174;0.9,2.9,0.1,1.2,1.4,0.530375587;3.8,10.1,1.4,3.3,4.2,0.53;5.2,8,5.4,6.4,5,1.275;11.8,12.2,9.2,12.2,8.4,2.39;11.3,18.7,9.7,10,8.8,12.92769231;20.1,10,19.8,23.3,15,29.25;9.2,9.4,10.6,9.4,10.9,42.4;11.1,21.6,6.3,6.4,6.5,29;46.4,65.7,28.4,42.4,30.5,84.2;50.5,39,71.3,54.3,59.4,543;11.8,4.4,39.5,32.3,38.2,516;1.8,16.9,1.5,1.3,12.5,139;14.5,8.3,9,14.5,5.9,83.8;0.3,2,0.6,0.2,0.1,107;4.5,6.2,0.2,0.2,0.2,45.9;5.6,7.6,1.1,2.7,1.3,36.84285714;21.4,20.1,5.2,8.1,22.7,105;5.2,3.1,44.6,44.4,36.1,447;3.3,4.7,2.9,3.1,3.9,126;5.3,4.5,3.5,4.5,4.2,61;18.2,33.4,3.3,3.7,3.5,50.6;16.8,3,29.5,26.4,17.7,80.9;3.9,5,1.3,1.4,3.3,192;0.4,1.9,0.1,3.8,0.7,48;8,7.7,5,4.9,7.5,41;0.2,0.8,0.9,1.5,1.4,38.5;1,1.5,2.4,1.3,13,36.5;1.4,15,0.8,0.3,0.8,36;14.3,0.9,18.8,15.1,9.2,39.7;0.1,0.2,5.8,0.8,9.4,64.6;0,0,0.8,1,0.1,44.24;0,0,0,0,0,34.3;0,0,0,0,0,32.65;0,0,0,0,0,31;0,0,0,0,0.1,29.35;0,0,0,0,0,27.7;0,0,0,0,0,26.05;0,0.2,0,0,0,24.4;0,0.1,0,0,0,22.75;0,0.1,0,0,0,21.1;0,0.1,0,0,0,19.45;0,0.1,0,0,0,17.8;0,0.1,0,0,0,16.15;0,0.1,0,0,0,14.5;0,0.1,0,0,0.1,13.80434783;0,0.1,0,0,0,13.10869565;0,0.1,0,0,0,12.67628866;0,0.1,0,0,0,12.35670103;0,0.1,0,0,0,12.0371134;0,0.1,0,0,0,11.71752577;0,0.1,0,0,0,11.39793814;0,0.1,0,0,0,11.07835052;0,0.1,0.1,0,0,10.75876289;0,0.1,0,0,0,10.43917526;0,0.1,0,0,0,10.11958763;0,0.1,0,0,0,9.8];
-data{3}=[0,0,0,0,0,0;0,0,0,0,0,0;0,0,0,0,0,0;0,0,0,0,0,0;0,0,0,0,0,0;19.4,9.5,15,0,20.4,0;11.7,6.8,8.2,15,10.6,30.3;0.7,0.2,0.3,6,0.5,5.55;0,0,0,0.2,0,1.16;0,0,0,0,0,0.77;0,0,0,0,0,0.38;0,0,0,0,0,0.31;0,0,0,0,0,0.30849711;0,0,0,0,0,0.306184971;0,0,0,0,0,0.303872832;0,0,0,0,0,0.301560694;0,0,0,0,0,0.299248555;0,0,0,0,0,0.296936416;0,0,0,0,0,0.294624277;0,0,0,0,0,0.292312139;0,0,0,0,0,0.29;0,0,0,0,0,0.265833333;0,0,0,0,0,0.241666667;0,0,0,0,0,0.2175];
-data{4}=[0,0,0,0,0,0.188956311;0,0,0,0,0,0.187463592;0,0,0,0,0,0.185970874;0,0,0,0,0,0.184478155;0,0,0,0,0,0.182985437;0,0,0,0,0,0.181492718;0,59.2,0,0,1,0.18;44,2.6,10.1,12.5,7.8,34.13333333;0.8,0,0.1,4.1,0.1,16.8;0,0,0,0.1,0,5.37;0.2,0,0,0,0,4.333333333;0,0,0,0,0,3.296666667;0,0,0,0,0,2.26;0,0,0,0,0,2.086;0,0,0,0,0,1.912;0,0,0,0,0,1.738;0,0,0,0,0,1.564;0,0,0,0,0,1.39;0,0,0,0,0,1.216;0,0,0,0,0,1.042;0,0,0,0,0,0.868];
+%Firstly, input flood data and place it in a cell array, where each cell represents a flood (consisting of n columns of rainfall data and 1 column of flow data). The following all 20 floods used in the research. The first five columns of each flood contain data from five rainfall stations, and the sixth column contains measured flow data, with a duration of one hour.
+load('data.mat');
 %'tic' starts timing after the program runs, in order to record the current time when updating the optimal parameters for visualization purposes
 tic
 %The first line of 'doc' records the time of each update, and the second line records the NSE corresponding to the current optimal solution
@@ -16,7 +13,7 @@ if state==0
     %The algorithm hyperparameters are set as follows
     maxdiedai=200;%The maximum number of iterations, the larger the value, the longer the running time, but it may also bring about better results
     mtp=30;%Maximum step coefficient. The maximum value for perturbing a parameter is mtp*the step of the parameter
-    lvding=1:3;%The selected flood events for calibration. You can choose either a single flood or multiple floods, such as selecting 1-3 events for calibrating, and the fourth event is excluded because it needs to be kept for testing
+    lvding=1:15;%The selected flood events for calibration. You can choose either a single flood or multiple floods, such as selecting 1-15 events for calibrating, and 16-20 event is excluded because it needs to be kept for testing
     delta1=0.00001;%The minimum gradient allowed in MODE1 and MODE2 of the Gradient method. If the gradient is less than delta1, you need to enter MODE3 or end the search
     delta2=0.1;%The relative error limit between the current NSE and the best NSE found. At the end of MODE1 or MODE2: if the relative error is below delta3, the MODE3 search will begin; If the relative error is higher than delta3, it will end and start the next round of search.
     delta3=0.000000001;%The minimum gradient allowed in MODE3, if the gradient is less than delta3, it will end and start the next round of search
@@ -274,6 +271,6 @@ for i=3:maxdiedai
 end
 %Draw the optimal NSE curve over time
 plot(doc(1,:),doc(2,:))
-xlabel('time(h)')
+xlabel('time(second)')
 ylabel('average NSE of floods')
 %Continue running the test script for further visualization
