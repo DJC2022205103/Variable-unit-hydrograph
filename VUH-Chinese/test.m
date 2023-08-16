@@ -1,6 +1,6 @@
 %在运行main得到canshumax后，方可运行该脚本以检验模拟效果
 %指定需要检验的洪水场次
-jianyan=1:4;
+jianyan=1:20;
 %申请四个数组，分别记录每场洪水的模拟精度信息
 doc1=[];%NSE
 doc2=[];%洪量
@@ -8,8 +8,8 @@ doc3=[];%洪峰
 doc4=[];%滞时
 %遍历所有需要被检验的洪水场次，对于第j场洪水
 for j=jianyan
-    %作为示例，由于只有四场洪水，就选择了2*2的拼图
-    subplot(2,2,j)
+    %作为示例，由于有20场洪水，就选择了4*5的拼图
+    subplot(4,5,j)
     %调用水文模型，得到第j场洪水的模拟结果Qsim
     [nash,Qsim]=f(canshumax,data{j},F,dt,WU,WL,WD,location,LB);
     %再从实测数据中摘出实测流量和面平均雨量
