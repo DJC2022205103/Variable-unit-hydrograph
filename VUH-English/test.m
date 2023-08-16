@@ -1,6 +1,6 @@
 %After running 'main' to obtain 'canshumax', run this script to verify the simulation effect
 %Specify the flood event to be inspected
-jianyan=1:4;
+jianyan=1:20;
 %Apply for four arrays to record the simulation accuracy information of each flood separately
 doc1=[];%NSE
 doc2=[];%Flood volume
@@ -8,8 +8,8 @@ doc3=[];%Flood peak
 doc4=[];%Lag time
 %Traverse all flood events that need to be tested. For the jth event
 for j=jianyan
-    %As an example, due to only four floods, a 2*2 figure was chosen here
-    subplot(2,2,j)
+    %As an example, due to 20 floods, a 4*5 figure was chosen here
+    subplot(4,5,j)
     %Call the rainfall-runoff model to get the simulation result Qsim of the jth event
     [nash,Qsim]=f(canshumax,data{j},F,dt,WU,WL,WD,location,LB);
     %Extract the observed streamflow and areal average rainfall from the measured data
